@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue响应式</title>
+</head>
+<body>
+  <div id="app">
+    <ul>
+      <li v-for="product in products" v-bind:key="product.name">
+        <input type="number" v-model.number="product.count">
+        {{ product.name }}
+        <span style="color: red;" v-if="product.count === 0"> - 已售罄</span>
+        <button @click="product.count += 1">add</button>
+      </li>
+    </ul>
+    <div>总库存：{{ totalCount }}</div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        products: [],
+      },
+      computed: {
+        totalCount() {
+          return this.products.reduce((sum, product) => sum + product.count, 0);
+        }
+      },
+      created() {
+        setTimeout(() => {
+          this.products = [
+            { name: 'JavaScript权威指南', count: 1},
+            { name: 'HTTP权威指南', count: 2 },
+            { name: '你不知道的JavaScript', count: 3 },
+            { name: '微服务架构设计模式', count: 0 },
+          ]
+        }, 500);
+      },
+    });
+
+  </script>
+</body>
+</html>

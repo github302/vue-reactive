@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注意事项</title>
+</head>
+<body>
+  <div id="app">
+    <ul>
+      <li v-for="product in products" v-bind:key="product.name">
+        {{ product.name }} {{ product.count }}
+        <span style="color: red;" v-if="product.count === 0"> - 已售罄</span>
+      </li>
+    </ul>
+    <div>总库存：{{ totalCount }}</div>
+    <div>动态添加的data，{{ name }}</div>
+    <div>动态添加的属性，{{ obj.name }}</div>
+    <div>count的值：{{ count }}</div>
+    <p>
+      <button @click="changeItem">修改数组指定项</button>
+      <button @click="changeLength">修改数组长度</button>
+    </p>
+  <p>
+    <button @click="addProps">动态添加属性</button>
+    <button @click="addData">动态创建响应式数据</button>
+  </p>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        products: [
+            { name: 'JavaScript权威指南', count: 1},
+            { name: 'HTTP权威指南', count: 2 },
+            { name: '你不知道的JavaScript', count: 3 },
+            { name: '微服务架构设计模式', count: 0 },
+          ],
+        obj: {},
+        count: 0,
+      },
+      computed: {
+        totalCount() {
+          return this.products.reduce((sum, product) => sum + product.count, 0);
+        }
+      },
+      created() {
+        // 有效,尽量在 data 中定义需要的响应式数据
+        // this.name = '肖帅';
+      },
+      methods: {
+        addProps() {
+          // error
+          // this.obj.name = '帅帅';
+
+          // correct
+          // this.$set(this.obj, 'name', '帅帅');
+        },
+        addData() {
+          // error 无效
+          this.name = '肖帅1';
+          // this.count += 1;
+
+          // correct
+          // 在 data 属性中初始化值，或者在created中初始化也可以
+        },
+        changeItem() {
+          // error
+          // this.products[3] = { ...this.products[3], count: 10 };
+          this.products[3].count = 10;
+
+          // correct
+          // this.$set(this.products, 3, {...this.products[3], count: 10});
+        },
+        changeLength() {
+          // error
+          this.products.length = 0;
+
+          // correct
+          // this.products.splice(0);
+
+          // or
+          // this.products = [];
+        },
+      }
+    });
+
+  </script>
+</body>
+</html>

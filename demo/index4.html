@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>异步更新队列</title>
+</head>
+<body>
+  <div id="app">
+    <div @click="updateMessage">{{ message }}</div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        message: '1234',
+      },
+      methods: {
+        updateMessage() {
+          this.message = 'shuaishuai';
+          console.log(this.$el.textContent); // 未更新
+          
+          this.$nextTick(function() {
+            console.log("nextTick:", this.$el.textContent); // 已更新
+          })
+        }
+      }
+    });
+  
+  </script>
+</body>
+</html>
